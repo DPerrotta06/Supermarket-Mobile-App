@@ -215,7 +215,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 30),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => Registration()),
+                          );
+                        }
+                      },
                       child: Text(
                         textAlign: TextAlign.center,
                         "Don't have an account?\nCreate one today!",
@@ -235,5 +242,19 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+class Registration extends StatefulWidget {
+  const Registration({super.key});
+
+  @override
+  State<Registration> createState() => _RegistrationState();
+}
+
+class _RegistrationState extends State<Registration> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
