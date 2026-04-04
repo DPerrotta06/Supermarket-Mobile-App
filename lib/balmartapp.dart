@@ -168,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 30),
                     TextField(
                       textAlign: TextAlign.center,
-                      controller: emailController,
+                      controller: passwordController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blueAccent,
