@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1064931937884",
+    "project_id": "balmart-de9ba",
+    "storage_bucket": "balmart-de9ba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064931937884:android:07a29bbb71c9df14d82099",
+        "android_client_info": {
+          "package_name": "com.balmart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0mFKGp3za384IeYl-ZkRm5AfrzY0U3no"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
