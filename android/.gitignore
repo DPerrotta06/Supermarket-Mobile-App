@@ -8,7 +8,6 @@ GeneratedPluginRegistrant.java
 .cxx/
 google-services.json
 android/app/google-services.json
-android/local.properties
 android/app/local.properties
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/to/reference-keystore

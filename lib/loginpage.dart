@@ -1,5 +1,8 @@
 import 'package:balmart/registration.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'balmartapp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _isNotVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: [
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       textAlign: TextAlign.center,
                       controller: emailController,
                       decoration: InputDecoration(
@@ -89,12 +94,25 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 30),
                     TextField(
+                      style: TextStyle(color: Colors.white),
+                      obscureText: _isNotVisible,
                       textAlign: TextAlign.center,
-                      controller: emailController,
+                      controller: passwordController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blueAccent,
                         labelText: 'Password',
+                        suffixIcon: IconButton(
+                          onPressed: () => setState(() {
+                            _isNotVisible = !_isNotVisible;
+                          }),
+                          icon: Icon(
+                            color: Colors.white,
+                            _isNotVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
                         labelStyle: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -118,7 +136,28 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                        } on FirebaseAuthException catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Please make sure you entered the correct credentials!',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         elevation: 10,
