@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'balmartapp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'models/User.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 
 class LoginPage extends StatefulWidget {
@@ -187,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {
                         if (mounted) {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(builder: (_) => Registration()),
                           );
