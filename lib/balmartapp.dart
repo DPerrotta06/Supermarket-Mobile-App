@@ -1,6 +1,7 @@
 import 'package:balmart/splashscreenpage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'items_category_display.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,7 +9,7 @@ void main() async {
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BalmartSplashScreen(),
+      home: ItemsCategoryDisplay(),
     ),
   );
 }
