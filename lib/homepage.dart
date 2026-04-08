@@ -245,7 +245,8 @@ class _HomePageState extends State<HomePage> {
           // Start shopping Button
           ElevatedButton(
               onPressed: () {
-                // Navigate to fruits Page
+                //TODO: Navigate to fruits Page
+
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent,
