@@ -1,13 +1,17 @@
 class Item {
+  final String id;
   final String name;
   final double price;
   final String imageURL;
-  int quantity;
+  final String category;
+  final double quantity;
 
   Item({
+    required this.id,
     required this.name,
     required this.price,
     required this.imageURL,
-    this.quantity = 0,
+    required this.category,
+    required this.quantity,
   });
 }

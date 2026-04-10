@@ -9,7 +9,7 @@ void main() async {
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ItemsCategoryDisplay(),
+      home: BalmartSplashScreen(),
     ),
   );
 }
