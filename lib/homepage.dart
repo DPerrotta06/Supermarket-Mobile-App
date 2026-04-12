@@ -17,6 +17,46 @@ class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
   Timer? _timer;
 
+  Widget _promoCard(IconData icon, Color color, String title, String subtitle) {
+    return Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        // withOpacity is deprecated in newer Flutter versions, withValues is the replacement
+        color: color.withValues(alpha: 0.1), // make color transparent
+        borderRadius: BorderRadius.circular(12),
+        // withOpacity is deprecated in newer Flutter versions, withValues is the replacement
+        border: Border.all(color: color.withValues(alpha: 0.4)), // make color transparent
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 40),
+          SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+              color: color,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'Poppins',
+              color: Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
   final List<Map<String, dynamic>> _carouselItems = [
     {
       'label': 'Fruits',
@@ -153,7 +193,8 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.amber,
         centerTitle: true,
       ),
-      body: Column(
+      body: SingleChildScrollView( // Scrollable container
+        child: Column(
         children: [
           SizedBox(height: 15),
           // Carousel Title
@@ -226,7 +267,8 @@ class _HomePageState extends State<HomePage> {
                                 end: Alignment.bottomCenter,
                                 colors: [
                                   Colors.transparent,
-                                  Colors.black.withOpacity(0.6),
+                                  // withOpacity is deprecated in newer Flutter versions, withValues is the replacement
+                                  Colors.black.withValues(alpha: 0.6), // make color transparent
                                 ],
                               ),
                             ),
@@ -270,7 +312,33 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          SizedBox(height: 20),
+          // Promotion Section
+          Text(
+            'Promotions',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+            ),
+          ),
           SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: GridView.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                _promoCard(Icons.local_shipping, Colors.green, 'Free Delivery', 'Orders over \$100'),
+                _promoCard(Icons.local_bar, Colors.purple, 'Alcohol Deal', 'Buy 3 bottles of Kraken Black Cherry pay for 2'),
+                _promoCard(Icons.checkroom, Colors.orange, 'Clothing Deal', 'Buy 2 Adidas Hoodie pay for 1'),
+                _promoCard(Icons.medical_services, Colors.red, 'Medicine Deal', 'Buy 3 bottles of advil pay for 2'),
+              ],
+            ),
+          ),
           // Start shopping Button
           ElevatedButton(
             onPressed: () {
@@ -294,6 +362,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
       ),
       drawer: Drawer(
         child: ListView(
