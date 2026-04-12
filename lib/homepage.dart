@@ -1,3 +1,4 @@
+import 'package:balmart/about_us_and_contact_info.dart';
 import 'package:balmart/loginpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           'Home Page',
           style: TextStyle(
-            color: Colors.greenAccent,
+            color: Colors.white,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
           ),
@@ -313,6 +314,25 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+            ),
+            ListTile(
+              leading: Icon(Icons.contact_mail, color: Colors.amber),
+              title: Text(
+                'About Us & Contact',
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close drawer first
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AboutUsAndContactInfo(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: Icon(Icons.logout, color: Colors.pink),
