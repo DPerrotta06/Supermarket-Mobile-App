@@ -164,7 +164,10 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(
+            backgroundColor: Colors.green,
+            valueColor: AlwaysStoppedAnimation(Colors.orangeAccent),
+          );
         },
       ),
     );
