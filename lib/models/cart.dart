@@ -7,5 +7,5 @@ class Cart {
   Cart({required this.userId, required this.items});
 
   double get total =>
-      items.fold(0, (sum, item) => sum + item.price * item.quantity);
+      items.fold(0, (sum, item) => sum + item.price * (item.quantity ?? 1));
 }

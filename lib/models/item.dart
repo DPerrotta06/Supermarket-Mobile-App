@@ -4,7 +4,8 @@ class Item {
   final double price;
   final String imageURL;
   final String category;
-  final double quantity;
+  final double? quantity;
+  final String? size;
 
   Item({
     required this.id,
@@ -13,5 +14,6 @@ class Item {
     required this.imageURL,
     required this.category,
     required this.quantity,
+    required this.size
   });
 }

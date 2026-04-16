@@ -43,6 +43,7 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
             imageURL: itemData['imageURL'],
             category: itemData['category'],
             quantity: itemData['quantity'],
+            size: itemData['size'],
           ),
         )
         .toList();

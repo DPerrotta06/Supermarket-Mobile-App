@@ -1,9 +1,7 @@
 import 'package:balmart/homepage.dart';
+import 'package:balmart/password_reset.dart';
 import 'package:balmart/registration.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'balmartapp.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 
 class LoginPage extends StatefulWidget {
@@ -182,15 +180,30 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
                     TextButton(
                       onPressed: () {
-                        if (mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => Registration()),
-                          );
-                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => PasswordReset()),
+                        );
+                      },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => Registration()),
+                        );
                       },
                       child: Text(
                         textAlign: TextAlign.center,
@@ -199,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.blueAccent,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Poppins',
-                          fontSize: 15,
+                          fontSize: 17,
                         ),
                       ),
                     ),

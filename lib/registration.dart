@@ -13,7 +13,9 @@ bool isValidEmail(String email) {
 }
 
 bool isValidPassword(String pass) {
-  final reg = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=(?:.*[!#$%^&*.?":{}|<>]){2,}).{8,16}$');
+  final reg = RegExp(
+    r'^(?=.*[A-Za-z])(?=.*\d)(?=(?:.*[!#$%^&*.?":{}|<>]){2,}).{8,16}$',
+  ); //NEEDS TO BE FIXED
   return reg.hasMatch(pass);
 }
 
@@ -29,18 +31,18 @@ class _RegistrationState extends State<Registration> {
   TextEditingController passwordController = TextEditingController();
   bool _isNotVisible = true;
 
-  void show(String str) {
+  void show(String str, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-              str,
-              style: TextStyle(
-                color: Colors.red,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
-              ),
-            )
-        )
+      SnackBar(
+        content: Text(
+          str,
+          style: TextStyle(
+            color: color,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 
@@ -50,36 +52,41 @@ class _RegistrationState extends State<Registration> {
 
     // Email Validate
     if (!isValidEmail(email)) {
-      show("Invalid Email Format!!!");
+      show("Invalid Email Format!!!", Colors.red);
       return;
     }
 
     // Password Validate
-    if(!isValidPassword(pass)) {
-      show("Password Must Be 8-16 Characters Long with Letters, Numbers & Two Special Characters");
+    if (!isValidPassword(pass)) {
+      show(
+        "Password Must Be 8-16 Characters Long with Letters, Numbers & Two Special Characters",
+        Colors.red,
+      );
       return;
     }
 
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email,
-          password: pass
+        email: email,
+        password: pass,
       );
 
-      show('Account Created Successfully');
+      show('Account Created Successfully', Colors.green);
 
       // Go to home page
       if (mounted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomePage()),
+        );
       }
-
     } on FirebaseAuthException catch (ex) {
       if (ex.code == 'email-already-in-use') {
-        show('Email Already Registered!!!');
+        show('Email Already Registered!!!', Colors.orange);
       } else if (ex.code == 'weak-password') {
-        show('Password too weak!!!');
+        show('Password too weak!!!', Colors.orange);
       } else {
-        show('Registration Failed!!!');
+        show('Registration Failed!!!', Colors.red);
       }
     }
   }
@@ -108,14 +115,12 @@ class _RegistrationState extends State<Registration> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Go back one screen (AKA Login Screen)
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 28,
-                      )
+                    onPressed: () {
+                      Navigator.pop(
+                        context,
+                      ); // Go back one screen (AKA Login Screen)
+                    },
+                    icon: Icon(Icons.arrow_back, color: Colors.white, size: 28),
                   ),
                 ),
                 RichText(
@@ -222,7 +227,7 @@ class _RegistrationState extends State<Registration> {
                         backgroundColor: Colors.green,
                         elevation: 10,
                         shadowColor: Colors.deepOrange,
-                        fixedSize: Size(150,50),
+                        fixedSize: Size(150, 50),
                       ),
                       child: Text(
                         'Register',
