@@ -9,13 +9,6 @@ class PasswordReset extends StatefulWidget {
 }
 
 class _PasswordResetState extends State<PasswordReset> {
-  bool _isValidPassword(String pass) {
-    final reg = RegExp(
-      r'^(?=.*[A-Za-z])(?=.*\d)(?=(?:.*[!#$%^&*.?":{}|<>]){2,}).{8,16}$',
-    );
-    return reg.hasMatch(pass);
-  }
-
   Future<void> resetPassword() async {
     String email = emailController.text.trim();
     if (email.isEmpty) {
@@ -79,7 +72,7 @@ class _PasswordResetState extends State<PasswordReset> {
           ),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 RichText(
                   text: TextSpan(
@@ -105,68 +98,72 @@ class _PasswordResetState extends State<PasswordReset> {
                     ],
                   ),
                 ),
-                Column(
-                  children: [
-                    Text(
-                      textAlign: TextAlign.center,
-                      'Enter your email to send a password reset:',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      style: TextStyle(color: Colors.white),
-                      controller: emailController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.blueAccent,
-                        labelText: 'Email',
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(180),
-                          borderSide: BorderSide(
-                            color: Colors.white70,
-                            width: 3.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(180),
-                          borderSide: BorderSide(
-                            color: Colors.blue,
-                            width: 3.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: resetPassword,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        elevation: 10,
-                        shadowColor: Colors.deepOrange,
-                        fixedSize: Size(170, 60),
-                      ),
-                      child: Text(
-                        'Send Email',
+                SizedBox(
+                  height: 400,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Enter your email to send a password reset:',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                           fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      TextField(
+                        style: TextStyle(color: Colors.white),
+                        controller: emailController,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.blueAccent,
+                          labelText: 'Email',
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(180),
+                            borderSide: BorderSide(
+                              color: Colors.white70,
+                              width: 3.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(180),
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 3.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: resetPassword,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          elevation: 10,
+                          shadowColor: Colors.deepOrange,
+                          fixedSize: Size(170, 60),
+                        ),
+                        child: Text(
+                          'Send Email',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
