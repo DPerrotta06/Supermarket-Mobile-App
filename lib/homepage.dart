@@ -1,5 +1,6 @@
 import 'package:balmart/about_us_and_contact_info.dart';
 import 'package:balmart/loginpage.dart';
+import 'package:balmart/shoppingpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // Needed for auto scroll timer
@@ -342,7 +343,11 @@ class _HomePageState extends State<HomePage> {
           // Start shopping Button
           ElevatedButton(
             onPressed: () {
-              // Navigate to fruits Page
+              // Navigate to Shopping Page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ShoppingPage())
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.greenAccent,
