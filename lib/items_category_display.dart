@@ -167,6 +167,7 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
           }
           return const CircularProgressIndicator(
             backgroundColor: Colors.green,
+
             valueColor: AlwaysStoppedAnimation(Colors.orangeAccent),
           );
         },
