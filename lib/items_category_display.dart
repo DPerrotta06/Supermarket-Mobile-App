@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'models/item.dart';
 
 class ItemsCategoryDisplay extends StatefulWidget {
   final String category;
@@ -20,34 +19,6 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
   String _itemSearch = '';
   final TextEditingController _searchController = TextEditingController();
   final Map<String, int> _itemCounters = {};
-  late Future<List<Item>> futureItems;
-
-  @override //initialize the futureItems that are coming from the database because they can always update
-  void initState() {
-    super.initState();
-    futureItems = _fetchItems();
-  }
-
-  //reading items from the database
-  Future<List<Item>> _fetchItems() async {
-    final response = await FirebaseFirestore.instance
-        .collection('items')
-        .where('category', isEqualTo: widget.category)
-        .get();
-    return response.docs
-        .map(
-          (itemData) => Item(
-            id: itemData.id,
-            name: itemData['name'],
-            price: itemData['price'],
-            imageURL: itemData['imageURL'],
-            category: itemData['category'],
-            quantity: itemData['quantity'],
-            size: itemData['size'],
-          ),
-        )
-        .toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +28,6 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
         child: AppBar(
           backgroundColor: widget.headerColor,
           title: Text(
-            //to make first letter uppercase of the desired produce section
             '${widget.category[0].toUpperCase()}${widget.category.substring(1)} Section',
             style: TextStyle(
               color: Colors.white,
@@ -66,6 +36,12 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
               fontSize: 25,
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.shopping_cart_sharp, color: Colors.white),
+            ),
+          ],
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(36),
@@ -99,76 +75,109 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
           ),
         ),
       ),
-      body: FutureBuilder<List<Item>>(
-        future: futureItems,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('items')
+            .where('category', isEqualTo: widget.category)
+            .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var items = snapshot.data!
-                .where(
-                  (item) => item.name.toLowerCase().contains(
-                    _itemSearch.toLowerCase(),
-                  ),
-                )
-                .toList();
-            return ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: EdgeInsets.all(15),
-                  child: ListTile(
-                    leading: Image.network(snapshot.data![index].imageURL),
-                    title: Text(
-                      snapshot.data![index].name,
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.green,
+                valueColor: AlwaysStoppedAnimation(Colors.orangeAccent),
+              ),
+            );
+          }
+          var docs = snapshot.data!.docs.where((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return (data['name'] ?? '').toString().toLowerCase().contains(
+              _itemSearch.toLowerCase(),
+            );
+          }).toList();
+          if (docs.isEmpty) {
+            return const Center(child: Text('No items found.'));
+          }
+          return GridView.builder(
+            padding: EdgeInsets.all(12),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.5,
+            ),
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final data = docs[index].data() as Map<String, dynamic>;
+              return Card(
+                color: Colors.lightBlueAccent,
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 80,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(12),
+                          child: Image.network(
+                            data['imageUrl'],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      data['name'] ?? '',
+                      style: TextStyle(
+                        color: Colors.amberAccent,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Price: \$${data['price']}',
                       style: TextStyle(
                         color: Colors.amberAccent,
                         fontFamily: 'Poppins',
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    subtitle: RichText(
-                      text: TextSpan(
+                    Text(
+                      widget.category == 'Alcohol'
+                          ? 'Qty: ${data['quantity'] ?? 'N/A'} L'
+                          : widget.category == 'Clothing'
+                          ? 'Size: ${data['size'] ?? 'N/A'}'
+                          : 'Qty: ${data['quantity'] ?? 'N/A'} g',
+                      style: TextStyle(
+                        color: Colors.amberAccent,
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          TextSpan(
-                            text: 'Price: \$${snapshot.data![index].price}',
-                            style: TextStyle(
-                              color: Colors.amberAccent,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Qty: ${snapshot.data![index].quantity}g',
-                            style: TextStyle(
-                              color: Colors.amberAccent,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
+                          _counterButton('+', () => _increment(docs[index].id)),
+                          SizedBox(width: 6),
+                          Text('${_itemCounters[docs[index].id] ?? 0}'),
+                          SizedBox(width: 6),
+                          _counterButton('-', () => _decrement(docs[index].id)),
                         ],
                       ),
                     ),
-                    trailing: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _counterButton(
-                          '+',
-                          () => _increment(snapshot.data![index].id),
-                        ),
-                        Text('${_itemCounters[snapshot.data![index].id] ?? 0}'),
-                        _counterButton(
-                          '-',
-                          () => _decrement(snapshot.data![index].id),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const CircularProgressIndicator(
-            backgroundColor: Colors.green,
-
-            valueColor: AlwaysStoppedAnimation(Colors.orangeAccent),
+                  ],
+                ),
+              );
+            },
           );
         },
       ),
@@ -180,8 +189,8 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
   });
 
   void _decrement(String itemId) => setState(() {
-    ((_itemCounters[itemId] ?? 0) > 0)
-        ? _itemCounters[itemId] = (_itemCounters[itemId]! - 1)
+    (_itemCounters[itemId] ?? 0) > 0
+        ? _itemCounters[itemId] = _itemCounters[itemId]! - 1
         : _itemCounters[itemId] = 0;
   });
 
@@ -191,13 +200,17 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
       child: Container(
         width: 40,
         height: 30,
-        decoration: BoxDecoration(border: Border.all(color: Colors.green)),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.green),
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(50),
+        ),
         alignment: Alignment.center,
         child: Text(
           label,
           style: TextStyle(
             fontSize: 20,
-            color: Colors.orangeAccent,
+            color: Colors.orange,
             fontFamily: 'Poppins',
           ),
         ),

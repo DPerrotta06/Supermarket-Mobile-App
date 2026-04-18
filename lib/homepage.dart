@@ -353,7 +353,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.greenAccent,
               elevation: 10,
               shadowColor: Colors.deepOrangeAccent,
-              fixedSize: Size(200, 55),
+              fixedSize: Size(200, 65),
             ),
             child: Text(
               'Start Shopping',

@@ -70,15 +70,34 @@ class _RegistrationState extends State<Registration> {
         email: email,
         password: pass,
       );
-
-      show('Account Created Successfully', Colors.green);
-
-      // Go to home page
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => HomePage()),
-        );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        await FirebaseAuth.instance.signOut();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                textAlign: TextAlign.center,
+                'Please check your email for verification.',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+            ),
+          );
+        } else {
+          // Go to home page
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => HomePage()),
+            );
+          }
+        }
       }
     } on FirebaseAuthException catch (ex) {
       if (ex.code == 'email-already-in-use') {

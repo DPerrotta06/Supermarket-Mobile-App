@@ -1,4 +1,8 @@
-import 'package:balmart/homepage.dart';
+import 'dart:convert';
+import 'dart:math';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:balmart/2fa.dart';
 import 'package:balmart/password_reset.dart';
 import 'package:balmart/registration.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _isNotVisible = true;
+  String generatedCode = '';
 
   Future<void> loginUser() async {
     String email = emailController.text.trim();
@@ -24,11 +29,36 @@ class _LoginPageState extends State<LoginPage> {
         email: email,
         password: password,
       );
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => HomePage()),
-        );
+      generatedCode = (100000 + Random().nextInt(900000)).toString();
+      final currentTime = DateTime.now();
+      final time =
+          '${currentTime.hour}:${currentTime.minute.toString().padLeft(2, '0')}';
+      final response = await http.post(
+        Uri.parse('https://api.emailjs.com/api/v1.0/email/send'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'service_id': 'balmart_service',
+          'template_id': 'template_gahyv96',
+          'user_id': '49S6Xueh8U5XTz4Cw', //public key
+          'accessToken': dotenv.env['EMAIL_JS_PRIVATE_KEY']!, //private key
+          'template_params': {
+            'to_email': email,
+            'passcode': generatedCode,
+            'time': time,
+          },
+        }),
+      );
+      print('EmailJS status: ${response.statusCode}');
+      print('EmailJS body: ${response.body}');
+      if (response.statusCode == 200) {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => TwoFactorAuth(email: email, code: generatedCode),
+            ),
+          );
+        }
       }
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

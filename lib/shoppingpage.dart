@@ -11,14 +11,14 @@ class ShoppingPage extends StatefulWidget {
 class _ShoppingPageState extends State<ShoppingPage> {
   // All Categories
   final List<Map<String, dynamic>> categories = [
-    {'label': 'Fruits', 'color': Colors.red, 'icon': Icons.apple},
-    {'label': 'Vegetables', 'color': Colors.green, 'icon': Icons.eco},
+    {'label': 'Fruit', 'color': Colors.red, 'icon': Icons.apple},
+    {'label': 'Vegetable', 'color': Colors.green, 'icon': Icons.eco},
     {'label': 'Meat', 'color': Colors.brown, 'icon': Icons.set_meal},
     {'label': 'Dairy', 'color': Colors.lightBlue, 'icon': Icons.local_drink},
-    {'label': 'Desserts', 'color': Colors.pink, 'icon': Icons.cake},
-    {'label': 'Snacks', 'color': Colors.orange, 'icon': Icons.lunch_dining},
+    {'label': 'Dessert', 'color': Colors.pink, 'icon': Icons.cake},
+    {'label': 'Snack', 'color': Colors.orange, 'icon': Icons.lunch_dining},
     {'label': 'Alcohol', 'color': Colors.purple, 'icon': Icons.local_bar},
-    {'label': 'Toiletries', 'color': Colors.teal, 'icon': Icons.bathroom},
+    {'label': 'Toiletry', 'color': Colors.teal, 'icon': Icons.bathroom},
     {'label': 'Clothing', 'color': Colors.indigo, 'icon': Icons.checkroom},
     {
       'label': 'Medicine',
