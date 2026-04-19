@@ -127,7 +127,7 @@ class _AboutUsAndContactInfoState extends State<AboutUsAndContactInfo> {
                 children: [
                   Icon(Icons.location_on),
                   SizedBox(width: 5),
-                  Text('Montreal, QC', textAlign: TextAlign.center),
+                  Text('11575 Avenue P.M Favier, Montreal-Nord Quebec', textAlign: TextAlign.center),
                 ],
               ),
             ],

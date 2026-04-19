@@ -14,7 +14,7 @@ bool isValidEmail(String email) {
 
 bool isValidPassword(String pass) {
   final reg = RegExp(
-    r'^(?=.*[A-Za-z])(?=.*\d)(?=(?:.*[!#$%^&*.?":{}|<>]){2,}).{8,16}$',
+    r'^(?=.*[A-Za-z_])(?=.*\d)(?=(?:.*[!#$%^&*.?":{}|<>]){2,}).{8,16}$',
   ); //NEEDS TO BE FIXED
   return reg.hasMatch(pass);
 }

@@ -5,8 +5,9 @@ import 'payment_service.dart';
 
 class PaymentPage extends StatefulWidget {
   final Cart userCart;
+  final double discountedTotal;
 
-  const PaymentPage({super.key, required this.userCart});
+  const PaymentPage({super.key, required this.userCart, required this.discountedTotal});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -30,7 +31,7 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() => _isLoading = true);
     try {
       await PaymentService().makePayment(
-        widget.userCart.total,
+        widget.discountedTotal,
       ); //AMOUNT MUST BE OVER 50 CENTS
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -46,6 +47,7 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
         );
+        widget.userCart.clear(); // clears cart after payment
       }
     } catch (e) {
       if (mounted) {
@@ -147,7 +149,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         valueColor: AlwaysStoppedAnimation(Colors.orangeAccent),
                       )
                     : Text(
-                        'Pay \$${widget.userCart.total.toStringAsFixed(2)}',
+                        'Pay \$${widget.discountedTotal.toStringAsFixed(2)}',
                         //AMOUNT MUST BE OVER 50 CENTS
                         style: TextStyle(
                           color: Colors.white,

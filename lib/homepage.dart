@@ -160,18 +160,12 @@ class _HomePageState extends State<HomePage> {
   String getName(String str) {
     String name = str.split('@')[0]; // get par before the @
     name = name.replaceAll(RegExp(r'[0-9]'), ''); // remove numbers
-    name = name.replaceAll(
-      RegExp(r'[._]'),
-      ' ',
-    ); // dots and underscore gives a space
-    return name
-        .split(' ')
-        .map(
-          (word) =>
-              word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '',
-        )
-        .join(' ')
-        .trim(); // Capitalize each word
+    name = name.replaceAll(RegExp(r'[._]'), ' '); // dots and underscore gives a space
+    if (name.isEmpty) return '?';
+    if (name.length > 8) {
+      name = name.substring(0,8);
+    }
+    return name[0].toUpperCase() + name.substring(1).toLowerCase();
   }
 
   @override
@@ -334,9 +328,9 @@ class _HomePageState extends State<HomePage> {
               physics: NeverScrollableScrollPhysics(),
               children: [
                 _promoCard(Icons.local_shipping, Colors.green, 'Free Delivery', 'Orders over \$100'),
-                _promoCard(Icons.local_bar, Colors.purple, 'Alcohol Deal', 'Buy 3 bottles of Kraken Black Cherry pay for 2'),
-                _promoCard(Icons.checkroom, Colors.orange, 'Clothing Deal', 'Buy 2 Adidas Hoodie pay for 1'),
-                _promoCard(Icons.medical_services, Colors.red, 'Medicine Deal', 'Buy 3 bottles of advil pay for 2'),
+                _promoCard(Icons.local_bar, Colors.purple, 'Alcohol Deal', 'Buy 3 bottles of Booze pay for 2'),
+                _promoCard(Icons.checkroom, Colors.orange, 'Clothing Deal', 'Buy 2 Articles of Clothing pay for 1'),
+                _promoCard(Icons.medical_services, Colors.red, 'Medicine Deal', 'Buy 3 Articles of Medicine pay for 2'),
               ],
             ),
           ),

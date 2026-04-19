@@ -1,4 +1,8 @@
+import 'package:balmart/cartpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:balmart/models/cart.dart';
+import 'package:provider/provider.dart';
+import 'package:balmart/models/item.dart';
 import 'package:flutter/material.dart';
 
 class ItemsCategoryDisplay extends StatefulWidget {
@@ -18,10 +22,10 @@ class ItemsCategoryDisplay extends StatefulWidget {
 class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
   String _itemSearch = '';
   final TextEditingController _searchController = TextEditingController();
-  final Map<String, int> _itemCounters = {};
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
@@ -38,7 +42,12 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => CartPage()),
+                );
+              },
               icon: Icon(Icons.shopping_cart_sharp, color: Colors.white),
             ),
           ],
@@ -112,6 +121,16 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
             itemCount: docs.length,
             itemBuilder: (context, index) {
               final data = docs[index].data() as Map<String, dynamic>;
+              final itemId = docs[index].id;
+              final item = Item(
+                id: itemId,
+                name: data['name'] ?? '',
+                price: (data['price'] as num).toDouble(),
+                imageURL: data['imageUrl'] ?? '',
+                category: data['category'] ?? '',
+                quantity: data['quantity'] != null ? (data['quantity'] as num).toDouble() : null,
+                size: data['size'] is List ? (data['size'] as List).join(', ') : data['size']?.toString(),
+              );
               return Card(
                 color: Colors.lightBlueAccent,
                 margin: EdgeInsets.all(10),
@@ -153,7 +172,7 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
                           ? 'Qty: ${data['quantity'] ?? 'N/A'} L'
                           : widget.category == 'Clothing'
                           ? 'Size: ${data['size'] ?? 'N/A'}'
-                          : 'Qty: ${data['quantity'] ?? 'N/A'} g',
+                          : 'Qty: ${data['quantity'] ?? 'N/A'} Kg',
                       style: TextStyle(
                         color: Colors.amberAccent,
                         fontFamily: 'Poppins',
@@ -166,11 +185,17 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _counterButton('+', () => _increment(docs[index].id)),
+                          _counterButton('+', () => cart.increment(item)),
                           SizedBox(width: 6),
-                          Text('${_itemCounters[docs[index].id] ?? 0}'),
+                          Text('${cart.getQuantity(itemId)}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           SizedBox(width: 6),
-                          _counterButton('-', () => _decrement(docs[index].id)),
+                          _counterButton('-', () => cart.decrement(itemId)),
                         ],
                       ),
                     ),
@@ -183,16 +208,6 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
       ),
     );
   }
-
-  void _increment(String itemId) => setState(() {
-    _itemCounters[itemId] = (_itemCounters[itemId] ?? 0) + 1;
-  });
-
-  void _decrement(String itemId) => setState(() {
-    (_itemCounters[itemId] ?? 0) > 0
-        ? _itemCounters[itemId] = _itemCounters[itemId]! - 1
-        : _itemCounters[itemId] = 0;
-  });
 
   Widget _counterButton(String label, VoidCallback onPress) {
     return InkWell(
