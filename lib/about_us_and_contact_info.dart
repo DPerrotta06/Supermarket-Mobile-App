@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:balmart/l10n/app_localizations.dart';
+
 
 class AboutUsAndContactInfo extends StatefulWidget {
   const AboutUsAndContactInfo({super.key});
@@ -39,10 +41,13 @@ class _AboutUsAndContactInfoState extends State<AboutUsAndContactInfo> {
 
   @override
   Widget build(BuildContext context) {
+    // Get Localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
           title: Text(
-            'About Us & Contact',
+            l10n.translate('aboutUsContact'),
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'Poppins',
@@ -60,7 +65,7 @@ class _AboutUsAndContactInfoState extends State<AboutUsAndContactInfo> {
               SizedBox(height: 15),
               // About Us Section
               Text(
-                'About Us',
+                l10n.translate('aboutUs'),
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -69,7 +74,7 @@ class _AboutUsAndContactInfoState extends State<AboutUsAndContactInfo> {
               ),
               SizedBox(height: 15),
               Text(
-                'We are a company based in Montreal. Our Mission is to make shopping easier for everyone',
+                l10n.translate('companyDescription'),
                 style: TextStyle(
                   fontSize: 24,
                   fontFamily: 'Poppins',
@@ -81,7 +86,7 @@ class _AboutUsAndContactInfoState extends State<AboutUsAndContactInfo> {
               SizedBox(height: 15),
               // Contact Section
               Text(
-                'Contact Us',
+                l10n.translate('contactUs'),
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

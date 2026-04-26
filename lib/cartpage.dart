@@ -3,6 +3,8 @@ import 'package:balmart/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:balmart/models/item.dart';
+import 'package:balmart/l10n/app_localizations.dart';
+
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -14,7 +16,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
 
   // Checks which promotions apply based on cart contents
-  List<String> _getAppliedPromotions(List<Map<String, dynamic>> items) {
+  List<String> _getAppliedPromotions(List<Map<String, dynamic>> items, AppLocalizations l10n) {
     List<String> applied = [];
 
     // Free delivery if total over $100
@@ -22,7 +24,7 @@ class _CartPageState extends State<CartPage> {
       0,
       (sum,item) => sum + (item['item'] as Item).price * (item['cartQty'] as int? ?? 0));
     if (originalTotal >= 100) {
-      applied.add('Free Delivery Applied (Orders over \$100)');
+      applied.add(l10n.translate('freeDelivery'));
     }
 
     // Count alcohol units
@@ -30,7 +32,7 @@ class _CartPageState extends State<CartPage> {
         .where((item) => (item['item'] as Item).category == 'Alcohol')
         .fold(0, (sum,item) => sum + (item['cartQty'] as int? ?? 0));
     if (alcoholCount >= 3) {
-      applied.add('Alcohol Deal Applied (Buy 3 pay for 2)');
+      applied.add(l10n.translate('alcoholDeal'));
     }
 
     // Count Clothing units
@@ -38,7 +40,7 @@ class _CartPageState extends State<CartPage> {
         .where((item) => (item['item'] as Item).category == 'Clothing')
         .fold(0, (sum,item) => sum + (item['cartQty'] as int? ?? 0));
     if(clothingCount >= 2) {
-      applied.add('Clothing Deal Applied (Buy 2 pay for 1)');
+      applied.add(l10n.translate('clothingDeal'));
     }
 
     // Count Medicine
@@ -46,7 +48,7 @@ class _CartPageState extends State<CartPage> {
         .where((item) => (item['item'] as Item).category == 'Medicine')
         .fold(0, (sum,item) => sum + (item['cartQty'] as int? ?? 0));
     if (medicineCount >= 3) {
-      applied.add('Medicine Deal Applied (Buy 3 pay for 2)');
+      applied.add(l10n.translate('medicineDeal'));
     }
     return applied;
   }
@@ -109,14 +111,17 @@ class _CartPageState extends State<CartPage> {
     final cart = Provider.of<Cart>(context);
     final items = cart.cartItems;
     final discountedTotal = _getDiscountedTotal(items, cart.total);
-    final appliedPromos = _getAppliedPromotions(items);
+    // Get Localization instance
+    final l10n = AppLocalizations.of(context);
+
+    final appliedPromos = _getAppliedPromotions(items, l10n);
     final shipping = _getShipping(discountedTotal);
     final tax = _getTax(discountedTotal);
     final finalTotal = discountedTotal + shipping + tax;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'My Cart',
+          l10n.translate('myCart'),
             style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -128,7 +133,7 @@ class _CartPageState extends State<CartPage> {
       ),
       body: items.isEmpty ? Center(
         child: Text(
-          'Your Cart is Empty',
+          l10n.translate('cartEmpty'),
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -215,7 +220,7 @@ class _CartPageState extends State<CartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Applied Promotions:',
+                      l10n.translate('appliedPromotions'),
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
@@ -244,7 +249,7 @@ class _CartPageState extends State<CartPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Original:',
+                    l10n.translate('original'),
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Poppins',
@@ -269,7 +274,7 @@ class _CartPageState extends State<CartPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Subtotal:',
+                  l10n.translate('subtotal'),
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Poppins',
@@ -294,7 +299,7 @@ class _CartPageState extends State<CartPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Shipping:',
+                  l10n.translate('shipping'),
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'Poppins',
@@ -302,7 +307,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 Text(
-                  shipping == 0 ? 'FREE' : '\$${shipping.toStringAsFixed(2)}',
+                  shipping == 0 ? l10n.translate('free') : '\$${shipping.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'Poppins',
@@ -318,7 +323,7 @@ class _CartPageState extends State<CartPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Tax (15%):',
+                  l10n.translate('tax'),
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'Poppins',
@@ -342,7 +347,7 @@ class _CartPageState extends State<CartPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total:',
+                  l10n.translate('total'),
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Poppins',
@@ -379,7 +384,7 @@ class _CartPageState extends State<CartPage> {
                     );
                 },
                 child: Text(
-                  'Proceed to Checkout',
+                  l10n.translate('proceedToCheckout'),
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Poppins',

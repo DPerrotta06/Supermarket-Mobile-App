@@ -2,6 +2,8 @@ import 'package:balmart/homepage.dart';
 import 'package:flutter/material.dart';
 import 'models/cart.dart';
 import 'payment_service.dart';
+import 'package:balmart/l10n/app_localizations.dart';
+
 
 class PaymentPage extends StatefulWidget {
   final Cart userCart;
@@ -20,11 +22,13 @@ class _PaymentPageState extends State<PaymentPage> {
   bool _isLoading = false;
 
   Future<void> _handlePayment() async {
+    // Get l10n before async gap so it works after awaits
+    final l10n = AppLocalizations.of(context);
     if (_streetController.text.isEmpty ||
         _cityController.text.isEmpty ||
         _postalCodeController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all shipping fields.')),
+        SnackBar(content: Text(l10n.translate('fillShippingFields'))),
       );
       return;
     }
@@ -37,7 +41,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Payment was successful!',
+              l10n.translate('paymentSuccess'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.green,
@@ -54,7 +58,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Payment cancelled or failed.',
+              l10n.translate('paymentFailed'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.redAccent,
@@ -97,6 +101,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get Localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -104,7 +111,7 @@ class _PaymentPageState extends State<PaymentPage> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: 'Chec',
+                text: l10n.translate('checkOut'),
                 style: TextStyle(
                   color: Colors.lightGreen,
                   fontWeight: FontWeight.bold,
@@ -113,7 +120,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
               TextSpan(
-                text: 'kout',
+                text: l10n.translate('checkOutSuffix'),
                 style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
@@ -149,7 +156,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         valueColor: AlwaysStoppedAnimation(Colors.orangeAccent),
                       )
                     : Text(
-                        'Pay \$${widget.discountedTotal.toStringAsFixed(2)}',
+                  '${l10n.translate('pay')} \$${widget.discountedTotal.toStringAsFixed(2)}',
                         //AMOUNT MUST BE OVER 50 CENTS
                         style: TextStyle(
                           color: Colors.white,
@@ -168,7 +175,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 );
               },
               child: Text(
-                'Continue Shopping',
+                l10n.translate('continueShopping'),
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -193,7 +200,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      'Your payment is secure and encrypted thanks to Stripe!',
+                      l10n.translate('paymentSecure'),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
@@ -224,7 +231,7 @@ class _PaymentPageState extends State<PaymentPage> {
             padding: EdgeInsets.all(18),
             children: [
               Text(
-                'Shipping Address',
+                l10n.translate('shippingAddress'),
                 style: TextStyle(
                   fontSize: 22,
                   fontFamily: 'Poppins',
@@ -235,13 +242,13 @@ class _PaymentPageState extends State<PaymentPage> {
               SizedBox(height: 15),
               _buildAddressForm(
                 _streetController,
-                'Street Address',
+                l10n.translate('streetAddress'),
                 Icons.location_on,
               ),
-              _buildAddressForm(_cityController, 'City', Icons.location_city),
+              _buildAddressForm(_cityController, l10n.translate('city'), Icons.location_city),
               _buildAddressForm(
                 _postalCodeController,
-                'Postal Code',
+                l10n.translate('postalCode'),
                 Icons.local_post_office_sharp,
               ),
               SizedBox(height: 25),

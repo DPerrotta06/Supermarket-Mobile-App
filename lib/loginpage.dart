@@ -7,6 +7,8 @@ import 'package:balmart/password_reset.dart';
 import 'package:balmart/registration.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:balmart/l10n/app_localizations.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -61,11 +63,12 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     } on FirebaseAuthException catch (e) {
+      final l10n = AppLocalizations.of(context); // translated error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             textAlign: TextAlign.center,
-            '$e',
+            l10n.translate('invalidCredentials'),
             style: TextStyle(color: Colors.red),
           ),
         ),
@@ -75,6 +78,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: Colors.orangeAccent,
       body: Padding(
@@ -127,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blueAccent,
-                        labelText: 'Email',
+                        labelText: l10n.translate('email'),
                         labelStyle: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -158,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blueAccent,
-                        labelText: 'Password',
+                        labelText: l10n.translate('password'),
                         suffixIcon: IconButton(
                           onPressed: () => setState(() {
                             _isNotVisible = !_isNotVisible;
@@ -201,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                         fixedSize: Size(150, 50),
                       ),
                       child: Text(
-                        'Login',
+                        l10n.translate('login'),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -218,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                       child: Text(
-                        'Forgot Password?',
+                        l10n.translate('forgotPassword'),
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -237,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         textAlign: TextAlign.center,
-                        "Don't have an account?\nCreate one today!",
+                        l10n.translate('noAccount'),
                         style: TextStyle(
                           color: Colors.blueAccent,
                           fontWeight: FontWeight.bold,

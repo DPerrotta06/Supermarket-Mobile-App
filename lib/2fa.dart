@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'package:balmart/l10n/app_localizations.dart';
 
 class TwoFactorAuth extends StatefulWidget {
   final String email;
@@ -19,6 +20,9 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
 
   @override
   Widget build(BuildContext context) {
+    // Get localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -71,7 +75,7 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
               children: [
                 Text(
                   textAlign: TextAlign.center,
-                  'Enter the verification code that was sent to ${widget.email}:',
+                  '${l10n.translate('enterCode')} ${widget.email}:',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Poppins',
@@ -87,7 +91,7 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.blueAccent,
-                    labelText: 'Code',
+                    labelText: l10n.translate('code'),
                     labelStyle: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -114,7 +118,7 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
                           SnackBar(
                             content: Text(
                               textAlign: TextAlign.center,
-                              'Try again!',
+                              l10n.translate('tryAgain'),
                               style: TextStyle(color: Colors.red),
                             ),
                           ),
@@ -126,7 +130,7 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
                     fixedSize: Size(150, 50),
                   ),
                   child: Text(
-                    'Proceed',
+                    l10n.translate('proceed'),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -140,7 +144,7 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
                   onPressed: () {},
                   child: Text(
                     textAlign: TextAlign.center,
-                    'Request a new code',
+                    l10n.translate('requestNewCode'),
                     style: TextStyle(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.bold,

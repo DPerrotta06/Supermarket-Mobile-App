@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:balmart/l10n/app_localizations.dart';
 
 class PasswordReset extends StatefulWidget {
   const PasswordReset({super.key});
@@ -10,13 +11,16 @@ class PasswordReset extends StatefulWidget {
 
 class _PasswordResetState extends State<PasswordReset> {
   Future<void> resetPassword() async {
+    // Get l10n here so snackbar messages are translated
+    final l10n = AppLocalizations.of(context);
+
     String email = emailController.text.trim();
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             textAlign: TextAlign.center,
-            'Please enter your email!',
+            l10n.translate('enterEmailRequired'),
             style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
           ),
         ),
@@ -30,7 +34,7 @@ class _PasswordResetState extends State<PasswordReset> {
           SnackBar(
             content: Text(
               textAlign: TextAlign.center,
-              'Password reset email sent!\nCheck your inbox!',
+              l10n.translate('passwordResetSent'),
               style: TextStyle(
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
@@ -44,7 +48,7 @@ class _PasswordResetState extends State<PasswordReset> {
       SnackBar(
         content: Text(
           textAlign: TextAlign.center,
-          'An error occured: $e',
+          '${l10n.translate('resetError')}: $e',
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
       );
@@ -55,6 +59,9 @@ class _PasswordResetState extends State<PasswordReset> {
 
   @override
   Widget build(BuildContext context) {
+    // Get localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: Colors.orangeAccent,
       body: Padding(
@@ -105,7 +112,7 @@ class _PasswordResetState extends State<PasswordReset> {
                     children: [
                       Text(
                         textAlign: TextAlign.center,
-                        'Enter your email to send a password reset:',
+                        l10n.translate('enterEmailReset'),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -121,7 +128,7 @@ class _PasswordResetState extends State<PasswordReset> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.blueAccent,
-                          labelText: 'Email',
+                          labelText: l10n.translate('email'),
                           labelStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -153,7 +160,7 @@ class _PasswordResetState extends State<PasswordReset> {
                           fixedSize: Size(170, 60),
                         ),
                         child: Text(
-                          'Send Email',
+                          l10n.translate('sendEmail'),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,

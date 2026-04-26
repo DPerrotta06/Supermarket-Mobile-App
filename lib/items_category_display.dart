@@ -4,6 +4,8 @@ import 'package:balmart/models/cart.dart';
 import 'package:provider/provider.dart';
 import 'package:balmart/models/item.dart';
 import 'package:flutter/material.dart';
+import 'package:balmart/l10n/app_localizations.dart';
+
 
 class ItemsCategoryDisplay extends StatefulWidget {
   final String category;
@@ -26,13 +28,16 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    // Get Localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
         child: AppBar(
           backgroundColor: widget.headerColor,
           title: Text(
-            '${widget.category[0].toUpperCase()}${widget.category.substring(1)} Section',
+            '${widget.category[0].toUpperCase()}${widget.category.substring(1)} ${l10n.translate('section')}',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -61,7 +66,7 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   filled: true,
-                  hintText: 'Search for an item here',
+                  hintText: l10n.translate('searchItem'),
                   hintStyle: TextStyle(fontFamily: 'Poppins'),
                   prefixIcon: Icon(Icons.search, color: Colors.amber),
                   labelStyle: TextStyle(
@@ -108,7 +113,7 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
             );
           }).toList();
           if (docs.isEmpty) {
-            return const Center(child: Text('No items found.'));
+            return Center(child: Text(l10n.translate('noItemsFound')));
           }
           return GridView.builder(
             padding: EdgeInsets.all(12),
@@ -160,7 +165,7 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Price: \$${data['price']}',
+                      '${l10n.translate('price')}: \$${data['price']}',
                       style: TextStyle(
                         color: Colors.amberAccent,
                         fontFamily: 'Poppins',
@@ -168,11 +173,11 @@ class _ItemsCategoryDisplayState extends State<ItemsCategoryDisplay> {
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      widget.category == 'Alcohol'
-                          ? 'Qty: ${data['quantity'] ?? 'N/A'} L'
-                          : widget.category == 'Clothing'
-                          ? 'Size: ${data['size'] ?? 'N/A'}'
-                          : 'Qty: ${data['quantity'] ?? 'N/A'} Kg',
+              widget.category == 'Alcohol'
+              ? '${l10n.translate('qty')}: ${data['quantity'] ?? l10n.translate('naValue')} L'
+                  : widget.category == 'Clothing'
+              ? '${l10n.translate('size')}: ${data['size'] ?? l10n.translate('naValue')}'
+                  : '${l10n.translate('qty')}: ${data['quantity'] ?? l10n.translate('naValue')} Kg',
                       style: TextStyle(
                         color: Colors.amberAccent,
                         fontFamily: 'Poppins',
