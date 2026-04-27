@@ -4,6 +4,8 @@ import 'package:balmart/shoppingpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // Needed for auto scroll timer
+import 'package:balmart/l10n/app_localizations.dart';
+import 'package:balmart/balmartapp.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -58,72 +60,72 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  final List<Map<String, dynamic>> _carouselItems = [
+   List<Map<String, dynamic>> _carouselItems(AppLocalizations l10n) => [
     {
-      'label': 'Fruits',
+      'label': l10n.translate('fruits'),
       'color': Colors.red,
       'icon': Icons.apple,
       'image':
           'https://th.bing.com/th/id/OIP.j1_y6Mjvzy5ORzCzm5GVHQHaGt?w=192&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     },
     {
-      'label': 'Vegetables',
+      'label': l10n.translate('vegetables'),
       'color': Colors.green,
       'icon': Icons.eco,
       'image':
           'https://img.freepik.com/premium-vector/lettuce-clipart-vector-illustration_1123392-3227.jpg',
     },
     {
-      'label': 'Meat',
+      'label': l10n.translate('meat'),
       'color': Colors.brown,
       'icon': Icons.set_meal,
       'image':
           'https://th.bing.com/th/id/OIP.BfKddISssH6KGYU57yfBmwHaHa?w=166&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     },
     {
-      'label': 'Dairy',
+      'label': l10n.translate('dairy'),
       'color': Colors.lightBlue,
       'icon': Icons.water_drop,
       'image':
           'https://th.bing.com/th/id/OIP.j6EPid9FooOOEi1gdzHIGAHaHa?w=236&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     },
     {
-      'label': 'Desserts',
+      'label': l10n.translate('desserts'),
       'color': Colors.pink,
       'icon': Icons.cookie,
       'image':
           'https://th.bing.com/th/id/OIP.kGc5E2v8xqhEnsj7IpZ6bgHaJQ?w=186&h=233&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     },
     {
-      'label': 'Snacks',
+      'label': l10n.translate('snacks'),
       'color': Colors.orange,
       'icon': Icons.restaurant,
       'image':
           'https://th.bing.com/th?q=Salt+and+Vinegar+Chips&w=120&h=120&c=1&rs=1&qlt=70&o=7&cb=1&dpr=1.3&pid=InlineBlock&rm=3&mkt=en-CA&cc=CA&setlang=en&adlt=moderate&t=1&mw=247',
     },
     {
-      'label': 'Alcohol',
+      'label': l10n.translate('alcohol'),
       'color': Colors.purple,
       'icon': Icons.local_bar,
       'image':
           'https://www.acouplecooks.com/wp-content/uploads/2021/08/Jagermeister-Drink-009.jpg',
     },
     {
-      'label': 'Toiletries',
+      'label': l10n.translate('toiletries'),
       'color': Colors.teal,
       'icon': Icons.bathroom,
       'image':
           'https://th.bing.com/th/id/OIP.4tELCduBYOCFPPcWPD9vqwHaHa?w=196&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     },
     {
-      'label': 'Clothing',
+      'label': l10n.translate('clothing'),
       'color': Colors.indigo,
       'icon': Icons.checkroom,
       'image':
           'https://th.bing.com/th/id/OIP.zUnMfAhyxVjUzz7BqQk4YAHaHa?w=186&h=186&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     },
     {
-      'label': 'Medicine',
+      'label': l10n.translate('medicine'),
       'color': Colors.blueGrey,
       'icon': Icons.medical_services,
       'image':
@@ -136,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // auto scrolls carousel every 5 seconds
     _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      if (_currentPage < _carouselItems.length - 1) {
+      if (_currentPage < 10 - 1) {
         _currentPage++;
       } else {
         _currentPage = 0; // loops back to start
@@ -175,10 +177,16 @@ class _HomePageState extends State<HomePage> {
     final email = user?.email ?? '';
     final name = getName(email);
 
+    // Get localization instance
+    final l10n = AppLocalizations.of(context);
+
+    // Carousel built with translations
+    final carouselItems = _carouselItems(l10n);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Home Page',
+          l10n.translate('homePage'),
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Poppins',
@@ -194,7 +202,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 15),
           // Carousel Title
           Text(
-            'Featured Categories',
+            l10n.translate('featuredCategories'),
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -212,9 +220,9 @@ class _HomePageState extends State<HomePage> {
                   _currentPage = index;
                 });
               },
-              itemCount: _carouselItems.length,
+              itemCount: carouselItems.length,
               itemBuilder: (context, index) {
-                final item = _carouselItems[index];
+                final item = carouselItems[index];
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
@@ -295,7 +303,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
-              _carouselItems.length,
+              carouselItems.length,
               (index) => Container(
                 margin: EdgeInsets.symmetric(horizontal: 4),
                 width: _currentPage == index ? 12 : 8,
@@ -310,7 +318,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 20),
           // Promotion Section
           Text(
-            'Promotions',
+            l10n.translate('promotions'),
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -327,10 +335,10 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                _promoCard(Icons.local_shipping, Colors.green, 'Free Delivery', 'Orders over \$100'),
-                _promoCard(Icons.local_bar, Colors.purple, 'Alcohol Deal', 'Buy 3 bottles of Booze pay for 2'),
-                _promoCard(Icons.checkroom, Colors.orange, 'Clothing Deal', 'Buy 2 Articles of Clothing pay for 1'),
-                _promoCard(Icons.medical_services, Colors.red, 'Medicine Deal', 'Buy 3 Articles of Medicine pay for 2'),
+                _promoCard(Icons.local_shipping, Colors.green, l10n.translate('freeDelivery'), l10n.translate('ordersOver100')),
+                _promoCard(Icons.local_bar, Colors.purple, l10n.translate('alcoholDeal'), l10n.translate('alcoholDealDesc')),
+                _promoCard(Icons.checkroom, Colors.orange, l10n.translate('clothingDeal'), l10n.translate('clothingDealDesc')),
+                _promoCard(Icons.medical_services, Colors.red, l10n.translate('medicineDeal'), l10n.translate('medicineDealDesc')),
               ],
             ),
           ),
@@ -350,7 +358,7 @@ class _HomePageState extends State<HomePage> {
               fixedSize: Size(200, 65),
             ),
             child: Text(
-              'Start Shopping',
+              l10n.translate('startShopping'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -386,7 +394,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.contact_mail, color: Colors.amber),
               title: Text(
-                'About Us & Contact',
+                l10n.translate('aboutUsContact'),
                 style: TextStyle(
                   color: Colors.teal,
                   fontFamily: 'Poppins',
@@ -403,9 +411,39 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.language, color: Colors.amber),
+              title: Text(
+                l10n.translate('language'),
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              trailing: DropdownButton<String>(
+                  value: Localizations.localeOf(context).languageCode,
+                  underline: SizedBox(),
+                  items: [
+                    DropdownMenuItem(value: 'en', child: Text('🇨🇦 English')),
+                    DropdownMenuItem(value: 'fr', child: Text('🇫🇷 Français')),
+                    DropdownMenuItem(value: 'it', child: Text('🇮🇹 Italiano')),
+                    DropdownMenuItem(value: 'de', child: Text('🇩🇪 Deutsch')),
+                    DropdownMenuItem(value: 'ru', child: Text('🇷🇺 Русский')),
+                    DropdownMenuItem(value: 'hr', child: Text('🇭🇷 Hrvatski')),
+                    DropdownMenuItem(value: 'ja', child: Text('🇯🇵 日本語')),
+                    DropdownMenuItem(value: 'es', child: Text('🇪🇸 Español')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      BalmartApp.setLocale(context, Locale(value));
+                    }
+                  }
+              ),
+            ),
+            ListTile(
               leading: Icon(Icons.logout, color: Colors.pink),
               title: Text(
-                'Logout',
+                l10n.translate('logout'),
                 style: TextStyle(
                   color: Colors.teal,
                   fontFamily: 'Poppins',

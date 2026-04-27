@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'balmartapp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:balmart/l10n/app_localizations.dart';
 
 bool isValidEmail(String email) {
   if (email.length < 10) {
@@ -15,7 +16,7 @@ bool isValidEmail(String email) {
 bool isValidPassword(String pass) {
   final reg = RegExp(
     r'^(?=.*[A-Za-z_])(?=.*\d)(?=(?:.*[!#$%^&*.?":{}|<>]){2,}).{8,16}$',
-  ); //NEEDS TO BE FIXED
+  );
   return reg.hasMatch(pass);
 }
 
@@ -47,21 +48,21 @@ class _RegistrationState extends State<Registration> {
   }
 
   Future<void> registerUser() async {
+    // Get l10n here so snackbar messages are translated
+    final l10n = AppLocalizations.of(context);
+
     String email = emailController.text.trim();
     String pass = passwordController.text.trim();
 
     // Email Validate
     if (!isValidEmail(email)) {
-      show("Invalid Email Format!!!", Colors.red);
+      show(l10n.translate('invalidEmail'), Colors.red);
       return;
     }
 
     // Password Validate
     if (!isValidPassword(pass)) {
-      show(
-        "Password Must Be 8-16 Characters Long with Letters, Numbers & Two Special Characters",
-        Colors.red,
-      );
+      show(l10n.translate('invalidPassword'), Colors.red);
       return;
     }
 
@@ -79,7 +80,7 @@ class _RegistrationState extends State<Registration> {
             SnackBar(
               content: Text(
                 textAlign: TextAlign.center,
-                'Please check your email for verification.',
+                l10n.translate('emailVerification'),
                 style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
@@ -101,17 +102,20 @@ class _RegistrationState extends State<Registration> {
       }
     } on FirebaseAuthException catch (ex) {
       if (ex.code == 'email-already-in-use') {
-        show('Email Already Registered!!!', Colors.orange);
+        show(l10n.translate('emailExists'), Colors.orange);
       } else if (ex.code == 'weak-password') {
-        show('Password too weak!!!', Colors.orange);
+        show(l10n.translate('passwordWeak'), Colors.orange);
       } else {
-        show('Registration Failed!!!', Colors.red);
+        show(l10n.translate('registrationFailed'), Colors.red);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Get localization instance
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: Colors.orangeAccent,
       body: Padding(
@@ -175,7 +179,7 @@ class _RegistrationState extends State<Registration> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blueAccent,
-                        labelText: 'Email',
+                        labelText: l10n.translate('email'),
                         labelStyle: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -206,7 +210,7 @@ class _RegistrationState extends State<Registration> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.blueAccent,
-                        labelText: 'Password',
+                        labelText: l10n.translate('password'),
                         suffixIcon: IconButton(
                           onPressed: () => setState(() {
                             _isNotVisible = !_isNotVisible;
@@ -249,7 +253,7 @@ class _RegistrationState extends State<Registration> {
                         fixedSize: Size(150, 50),
                       ),
                       child: Text(
-                        'Register',
+                        l10n.translate('register'),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
