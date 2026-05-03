@@ -38,6 +38,8 @@ dependencies:
   flutter_dotenv: any
   url_launcher: any
   provider: any
+  uuid: any
+  geolocator: any
   flutter_localizations:
     sdk: flutter
 

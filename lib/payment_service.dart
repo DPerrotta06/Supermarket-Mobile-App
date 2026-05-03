@@ -29,7 +29,6 @@ class PaymentService {
       print('Stripe error: $e');
       rethrow;
     }
-    return null;
   }
 
   Future<void> makePayment(double amount) async {

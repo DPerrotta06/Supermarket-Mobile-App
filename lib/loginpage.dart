@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:balmart/l10n/app_localizations.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -50,8 +49,6 @@ class _LoginPageState extends State<LoginPage> {
           },
         }),
       );
-      print('EmailJS status: ${response.statusCode}');
-      print('EmailJS body: ${response.body}');
       if (response.statusCode == 200) {
         if (mounted) {
           Navigator.push(
@@ -131,6 +128,17 @@ class _LoginPageState extends State<LoginPage> {
                       textAlign: TextAlign.center,
                       controller: emailController,
                       decoration: InputDecoration(
+                        suffixIcon: emailController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(
+                                  Icons.clear,
+                                  color: Colors.white70,
+                                ),
+                                onPressed: () {
+                                  emailController.clear();
+                                },
+                              )
+                            : null,
                         filled: true,
                         fillColor: Colors.blueAccent,
                         labelText: l10n.translate('email'),
@@ -165,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                         filled: true,
                         fillColor: Colors.blueAccent,
                         labelText: l10n.translate('password'),
-                        suffixIcon: IconButton(
+                        prefixIcon: IconButton(
                           onPressed: () => setState(() {
                             _isNotVisible = !_isNotVisible;
                           }),
@@ -176,6 +184,17 @@ class _LoginPageState extends State<LoginPage> {
                                 : Icons.visibility_off,
                           ),
                         ),
+                        suffixIcon: passwordController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(
+                                  Icons.clear,
+                                  color: Colors.white70,
+                                ),
+                                onPressed: () {
+                                  passwordController.clear();
+                                },
+                              )
+                            : null,
                         labelStyle: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

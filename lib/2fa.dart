@@ -1,4 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 import 'package:balmart/l10n/app_localizations.dart';
